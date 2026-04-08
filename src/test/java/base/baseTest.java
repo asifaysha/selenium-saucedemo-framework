@@ -2,6 +2,7 @@ package base;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -16,8 +17,14 @@ public class baseTest {
 	public void setup() 
 	{
 		WebDriverManager.chromedriver().setup();
-		driver=new ChromeDriver();
-		driver.manage().window().maximize();
+		//driver=new ChromeDriver();//this works locally but fails in GitHub actions  linux runners has no visible Ui so  it must run in headless mode
+		//driver.manage().window().maximize();
+		ChromeOptions options=new ChromeOptions();
+		options.addArguments("--headless=new");//no UI browser
+		options.addArguments("--no-sandbox");// linux permission issue
+		options.addArguments("--disable-dev-shm-usage");//memory crash issue
+		options.addArguments("--window-size=1920,1080");
+		driver=new ChromeDriver(options);
 		  driver.get("https://www.saucedemo.com/");
 		
 	}
